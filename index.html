@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pembayaran Galaxy - Dilz Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: black;
+      overflow-x: hidden;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    .bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
+      z-index: -1;
+      filter: brightness(0.6);
+    }
+    .logo-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 30px;
+      margin-top: 20px;
+    }
+    .logo {
+      width: 100px;
+      height: 100px;
+      padding: 15px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(5px);
+      cursor: pointer;
+      transition: transform 0.3s ease, opacity 0.5s;
+      animation: pop 1s ease-in-out infinite alternate;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo:hover {
+      transform: scale(1.1);
+    }
+    .info-box {
+      background: rgba(0,0,0,0.7);
+      padding: 25px 30px;
+      border-radius: 15px;
+      max-width: 90%;
+      display: none;
+      animation: fadeIn 0.5s ease;
+      user-select: text;
+      font-weight: 600;
+      font-size: 1.3rem;
+      color: #00ffcc;
+    }
+    .copy-instruction {
+      font-size: 0.9rem;
+      margin-top: 8px;
+      color: #ccc;
+    }
+    .bear {
+      width: 100px;
+      margin-top: 20px;
+      animation: float 2s infinite ease-in-out;
+      display: none; /* hide the bear gif since not needed */
+    }
+    .confirm-button {
+      margin-top: 20px;
+      background: #00ffcc;
+      color: black;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+    .confirm-button:hover {
+      background: #00cc99;
+    }
+    @keyframes pop {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <h1>Pembayaran Galaxy - Dilz Store</h1>
+  
+  <div class="logo-container">
+    <div class="logo" data-info="Gopay: 0812345678910 a.n. Dilz Store">
+      <img src="https://img.icons8.com/color/96/000000/gopay.png" alt="Gopay"/>
+    </div>
+    <div class="logo" data-info="Dana: 081234567890 a.n. Dilz Store">
+      <img src="https://img.icons8.com/color/96/000000/dana.png" alt="Dana"/>
+    </div>
+    <div class="logo" data-info="OVO: 081234567890 a.n. Dilz Store">
+      <img src="https://img.icons8.com/color/96/000000/ovo.png" alt="OVO"/>
+    </div>
+  </div>
+  
+  <div class="info-box" id="infoBox">
+    <div id="infoText"></div>
+    <div class="copy-instruction">Klik logo untuk menyalin info pembayaran</div>
+    <button class="confirm-button" id="confirmBtn" style="display:none;">
+      Konfirmasi Pembayaran ke WA Admin
+    </button>
+  </div>
+  
+  <script>
+    const logos = document.querySelectorAll('.logo');
+    const infoBox = document.getElementById('infoBox');
+    const infoText = document.getElementById('infoText');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const waAdminNumber = '6282163165670'; // Nomor WhatsApp admin (sesuaikan)
+
+    logos.forEach(logo => {
+      logo.addEventListener('click', () => {
+        const info = logo.getAttribute('data-info');
+        infoText.textContent = info;
+        infoBox.style.display = 'block';
+        confirmBtn.style.display = 'inline-block';
+        navigator.clipboard.writeText(info).then(() => {
+          infoText.textContent += ' (Disalin!)';
+        }).catch(() => {
+          infoText.textContent += ' (Salin gagal)';
+        });
+      });
+    });
+
+    confirmBtn.addEventListener('click', () => {
+      const message = encodeURIComponent('Halo Admin, saya sudah melakukan pembayaran melalui metode berikut: ' + infoText.textContent.replace(' (Disalin!)', ''));
+      window.open(`https://wa.me/${waAdminNumber}?text=${message}`, '_blank');
+    });
+  </script>
+</body>
+</html>
